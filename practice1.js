@@ -36,15 +36,25 @@ let currentPlayer = "R";
 //   ["Y", "Y", "R", "Y", " ", " ", " "],
 // ];
 
-// diagTestBoard
-const board = [
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', 'R', ' ', 'Y', ' ', ' ', ' '],
-    [' ', 'Y', 'Y', ' ', ' ', ' ', ' '],
-    ['R', 'Y', 'Y', 'R', ' ', ' ', ' '],
-    ['Y', 'R', 'R', 'Y', ' ', ' ', ' ']
-];
+// diagTestBoardPos
+// const board = [
+//     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+//     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+//     [' ', 'R', ' ', 'Y', ' ', ' ', ' '],
+//     [' ', 'Y', 'Y', ' ', ' ', ' ', ' '],
+//     ['R', 'Y', 'Y', 'R', ' ', ' ', ' '],
+//     ['Y', 'R', 'R', 'Y', ' ', ' ', ' ']
+// ];
+
+// diagTestBoardNeg
+// const board = [
+//   [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+//   [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+//   ['Y', 'R', ' ', ' ', ' ', ' ', ' '],
+//   ['R', 'Y', 'Y', ' ', ' ', ' ', ' '],
+//   ['R', 'Y', 'Y', 'R', ' ', ' ', ' '],
+//   [' ', 'R', 'R', 'Y', ' ', ' ', ' ']
+// ];
 
 function printBoard() {
   console.log(" 0 1 2 3 4 5 6");
@@ -61,14 +71,15 @@ function checkWinner() {
   // check rows win
   // 6 rows: i, 7 columns: j
   for (let i = 0; i < 6; i++) {
-    for (let j = 0; j < 3; j++) {
+    for (let j = 0; j <= 3; j++) {
       if (
         board[i][j] !== " " &&
         board[i][j] === board[i][j + 1] &&
         board[i][j] === board[i][j + 2] &&
         board[i][j] === board[i][j + 3]
       ) {
-        console.log('rows win');
+        console.log('horizontal win');
+        console.log(board[i][j], " wins!");
         return true;
       }
     }
@@ -83,37 +94,40 @@ function checkWinner() {
         board[i][j] === board[i + 2][j] &&
         board[i][j] === board[i + 3][j]
       ) {
-        console.log('columns win');
+        console.log('vertical win');
+        console.log(board[i][j], " wins!");
         return true;
       }
     }
   }
 
-  // check diagonal positive slope
-  for (let i = 0; i < 2; i++) {
-    for (let j = 0; j < 3; j++) {
+  // check diagonal neg slope
+  for (let i = 0; i <= 2; i++) {
+    for (let j = 0; j <= 3; j++) {
       if (
         board[i][j] !== " " &&
         board[i][j] === board[i + 1][j + 1] &&
         board[i][j] === board[i + 2][j + 2] &&
         board[i][j] === board[i + 3][j + 3]
       ) {
-        console.log('diag pos win');
+        console.log('diag neg win');
+        console.log(board[i][j], " wins!");
         return true;
       }
     }
   }
 
-  // check diagonal negative slope
+  // check diagonal pos slope
   for (let i = 3; i < 6; i++) {
-    for (let j = 0; j < 3; j++) {
+    for (let j = 0; j <= 3; j++) {
       if (
         board[i][j] !== " " &&
         board[i][j] === board[i - 1][j + 1] &&
         board[i][j] === board[i - 2][j + 2] &&
         board[i][j] === board[i - 3][j + 3]
       ) {
-        console.log('diag neg win');
+        console.log('diag pos win');
+        console.log(board[i][j], " wins!");
         return true;
       }
     }
@@ -122,7 +136,7 @@ function checkWinner() {
   return false;
 }
 
-function connect4(board) {}
+function connect4() {}
 
 printBoard();
 console.log(checkWinner());
