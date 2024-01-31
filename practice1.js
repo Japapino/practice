@@ -7,14 +7,14 @@ const readln = readline.createInterface({
 
 let currentPlayer = "R";
 
-// const board = [
-//     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-//     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-//     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-//     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-//     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-//     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-// ];
+const board = [
+    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+];
 
 // horizontalTestBoard
 // const board = [
@@ -54,6 +54,16 @@ let currentPlayer = "R";
 //   ['R', 'Y', 'Y', ' ', ' ', ' ', ' '],
 //   ['R', 'Y', 'Y', 'R', ' ', ' ', ' '],
 //   [' ', 'R', 'R', 'Y', ' ', ' ', ' ']
+// ];
+
+// fullTestBoard
+// const board = [
+//   ['R', 'R', 'R', 'Y', 'R', 'Y', 'R'],
+//   ['Y', 'R', 'R', 'Y', 'R', 'Y', 'R'],
+//   ['Y', 'R', 'Y', 'R', 'R', 'Y', 'R'],
+//   ['R', 'Y', 'R', 'Y', 'Y', 'R', 'Y'],
+//   ['R', 'Y', 'Y', 'R', 'Y', 'R', 'R'],
+//   ['R', 'R', 'R', 'Y', 'Y', 'R', 'R']
 // ];
 
 function printBoard() {
@@ -136,16 +146,69 @@ function checkWinner() {
   return false;
 }
 
-function connect4() {}
+function playTurn() {
+  readln.question(`Player ${currentPlayer}, enter your move (column): `, (answer) => {
+    const col = parseInt(answer, 10);
+
+    // validate column selection
+    if (isNaN(col) || col < 0 || col >= 7 ) {
+      console.log("Invalid move. Outside of game board. Try again.");
+      playTurn();
+      return;
+    } else if (board[0][col] !== " ") {
+      console.log("Invalid move. Column full. Try again.");
+      playTurn();
+      return;
+    }
+
+    // place piece, move bottom up
+    for (let row = 5; row >= 0; row --) {
+      if (board[row][col] === " ") {
+        board[row][col] = currentPlayer;
+        break;
+      }
+    }
+
+    printBoard();
+
+    if (checkWinner()) {
+      readln.close();
+      return;
+    }
+    
+    if(isBoardFull()) {
+      readln.close();
+      return;
+    }
+
+    switchPlayer();
+    playTurn();
+  });
+}
+
+function isBoardFull() {
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < 7; j++) {
+      if (
+        board[i][j] == " ") {
+        return false;
+      }
+    }
+  }
+  console.log("It's a tie!");
+  return true;
+}
+
 
 printBoard();
-console.log(checkWinner());
+playTurn();
+// console.log(isBoardFull());
 
-function cracklePop() {
-  for (let i = 1; i <= 100; i++) {
-    if (i % 3 === 0 && i % 5 === 0) console.log("CracklePop");
-    else if (i % 3 === 0) console.log("Crackle");
-    else if (i % 5 === 0) console.log("Pop");
-    else console.log(i);
-  }
-}
+// function cracklePop() {
+//   for (let i = 1; i <= 100; i++) {
+//     if (i % 3 === 0 && i % 5 === 0) console.log("CracklePop");
+//     else if (i % 3 === 0) console.log("Crackle");
+//     else if (i % 5 === 0) console.log("Pop");
+//     else console.log(i);
+//   }
+// }
