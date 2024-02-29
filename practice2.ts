@@ -107,8 +107,8 @@
 
 // function evalRPN(tokens: string[]): number | undefined {
 //   const numCheck = new RegExp(/^-?[0-9]\d*(\.\d+)?$/);
-//   let stack: number[] = []; 
-//   let val: number = 0; 
+//   let stack: number[] = [];
+//   let val: number = 0;
 //   for (let i = 0; i < tokens.length; i++) {
 //     let n = tokens[i];
 //     let isNumber = numCheck.test(n);
@@ -119,18 +119,18 @@
 //       } else {
 //           console.log('n: ', n);
 //             const a = stack.pop();
-//             const b = stack.pop(); 
+//             const b = stack.pop();
 //             switch(n) {
-//               case "+": 
-//                 val = b + a; 
-//                 break; 
-//               case "-": 
-//                 val = b - a; 
+//               case "+":
+//                 val = b + a;
 //                 break;
-//               case "*": 
-//                 val = b * a; 
+//               case "-":
+//                 val = b - a;
 //                 break;
-//               case "/": 
+//               case "*":
+//                 val = b * a;
+//                 break;
+//               case "/":
 //                 val = b/a > 0 ? Math.floor(b/a) : Math.ceil(b/a);
 //                 break;
 //               default: console.log('default1: ', n);
@@ -138,76 +138,119 @@
 //             stack.push(val);
 //         }
 //         console.log('===================', val);
-//       }  
+//       }
 //   return stack.pop();
 // };
 
 function largestRectangleArea(heights: number[]): number {
+  let result = new Array(heights.length).fill(0);
+  let stack: number[] = [];
 
-    let result = new Array(heights.length).fill(0);
-    let stack: number[] = [];
-
-    for(let i = 0; i < heights.length; i++) {
-        while(stack.length > 0 && heights[i] < heights[stack[stack.length - 1]]) {
-            let index: number = stack.pop() || 0;
-            result[index] = i - index;
-        }
-        stack.push(i);
+  for (let i = 0; i < heights.length; i++) {
+    while (stack.length > 0 && heights[i] < heights[stack[stack.length - 1]]) {
+      let index: number = stack.pop() || 0;
+      result[index] = i - index;
     }
+    stack.push(i);
+  }
 
-    result.forEach((v,i) => {
-      result[i] = v == 0 ? result.length - i : v;
-    });
+  result.forEach((v, i) => {
+    result[i] = v == 0 ? result.length - i : v;
+  });
 
-    console.log('right result: ', result);
+  console.log("right result: ", result);
 
-    let result2 = new Array(heights.length).fill(0);
-    let stack2: number[] = [];
+  let result2 = new Array(heights.length).fill(0);
+  let stack2: number[] = [];
 
-    for(let i = heights.length - 1; i >= 0; i--) {
-        while(stack2.length > 0 && heights[i] < heights[stack2[stack2.length - 1]]) {
-            let index: number = stack2.pop() || 0;
-            result2[index] = index - i;
-        }
-        stack2.push(i);
+  for (let i = heights.length - 1; i >= 0; i--) {
+    while (
+      stack2.length > 0 &&
+      heights[i] < heights[stack2[stack2.length - 1]]
+    ) {
+      let index: number = stack2.pop() || 0;
+      result2[index] = index - i;
     }
+    stack2.push(i);
+  }
 
-    result2.forEach((v,i) => {
-      result2[i] = v == 0 ? i + 1 : v;
-    });
+  result2.forEach((v, i) => {
+    result2[i] = v == 0 ? i + 1 : v;
+  });
 
-    // calculate the area
-    let finalResult: number[] = new Array(heights.length).fill(0);
-    for(let i = 0; i < result.length; i++) {
-      finalResult[i] = (result[i] + result2[i] - 1) * heights[i];
-    }
+  // calculate the area
+  let finalResult: number[] = new Array(heights.length).fill(0);
+  for (let i = 0; i < result.length; i++) {
+    finalResult[i] = (result[i] + result2[i] - 1) * heights[i];
+  }
 
-    console.log('Final result: ', finalResult);
+  console.log("Final result: ", finalResult);
 
-  return Math.max(...finalResult); 
-};
+  return Math.max(...finalResult);
+}
 
 function largestRectangleAreaOptimal(heights: number[]): number {
-  let stack = []
-  let area = 0
-  let i = 0
+  let stack: number[] = [];
+  let area = 0;
+  let i = 0;
   while (i < heights.length) {
-    if (stack.length === 0 || heights[i] > heights[stack[stack.length -1]]) {
-      stack.push(i)
-      i++
-    } else { 
+    if (stack.length === 0 || heights[i] > heights[stack[stack.length - 1]]) {
+      stack.push(i);
+      i++;
+    } else {
       //end of stack is local max and rest is decreasing
-      const a = heights[stack.pop()] * (stack.length === 0 ? i : (i-1)-stack[stack.length-1])
-      area = Math.max(area, a)
+      const a =
+        heights[stack.pop() as number] *
+        (stack.length === 0 ? i : i - 1 - stack[stack.length - 1]);
+      area = Math.max(area, a);
     }
   }
   // we have to calculate the rest of the stack
   while (stack.length > 0) {
-    const a = heights[stack.pop()] * (stack.length === 0 ? i : (i-1)-stack[stack.length-1])
-    area = Math.max(area, a)
+    const a =
+      heights[stack.pop() as number] *
+      (stack.length === 0 ? i : i - 1 - stack[stack.length - 1]);
+    area = Math.max(area, a);
   }
-  return area
-};
+  return area;
+}
+
+function twoSum(numbers: number[], target: number): number[] {
+  for (let i = 0; i <= numbers.length; i++) {
+    if ( i > 0 && numbers[i] == numbers[i - 1]) {
+          console.log('skipped');
+      continue;
+    }
+    for (let j = i + 1; j < numbers.length; j++) {
+      console.log(i + 1,j + 1);
+      const result = numbers[i] + numbers[j];
+      if (result == target) {
+        return [i + 1, j + 1];
+      }
+    }
+  }
+  console.log("No result found");
+  return [0, 0];
+}
+
+function twoSumOptimal(numbers: number[], target: number): number[] {
+
+  // two pointer approach
+  // since we know that the array is sorted in ascending order we can start at the beginning and end of the array.
+  let left = 0;
+  let right = numbers.length - 1;
+
+  while (left < right) {
+      const sum = numbers[left] + numbers[right];
+
+      if (sum === target) return [left + 1, right + 1];
+      if (sum < target) left++;
+      if (sum > target) right--;
+  }
+
+  return [];
+}
+twoSum([0, 0, 0, 0, 0, 2, 7, 11, 15], 9); // [1,2]
 
 // largestRectangleArea([2,1,5,6,2,3]);
 // topKFrequent([1, 1, 1, 2, 2, 3], 2); // [1,2]
