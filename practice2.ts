@@ -142,115 +142,191 @@
 //   return stack.pop();
 // };
 
-function largestRectangleArea(heights: number[]): number {
-  let result = new Array(heights.length).fill(0);
-  let stack: number[] = [];
+// function largestRectangleArea(heights: number[]): number {
+//   let result = new Array(heights.length).fill(0);
+//   let stack: number[] = [];
 
-  for (let i = 0; i < heights.length; i++) {
-    while (stack.length > 0 && heights[i] < heights[stack[stack.length - 1]]) {
-      let index: number = stack.pop() || 0;
-      result[index] = i - index;
-    }
-    stack.push(i);
-  }
+//   for (let i = 0; i < heights.length; i++) {
+//     while (stack.length > 0 && heights[i] < heights[stack[stack.length - 1]]) {
+//       let index: number = stack.pop() || 0;
+//       result[index] = i - index;
+//     }
+//     stack.push(i);
+//   }
 
-  result.forEach((v, i) => {
-    result[i] = v == 0 ? result.length - i : v;
-  });
+//   result.forEach((v, i) => {
+//     result[i] = v == 0 ? result.length - i : v;
+//   });
 
-  console.log("right result: ", result);
+//   console.log("right result: ", result);
 
-  let result2 = new Array(heights.length).fill(0);
-  let stack2: number[] = [];
+//   let result2 = new Array(heights.length).fill(0);
+//   let stack2: number[] = [];
 
-  for (let i = heights.length - 1; i >= 0; i--) {
-    while (
-      stack2.length > 0 &&
-      heights[i] < heights[stack2[stack2.length - 1]]
-    ) {
-      let index: number = stack2.pop() || 0;
-      result2[index] = index - i;
-    }
-    stack2.push(i);
-  }
+//   for (let i = heights.length - 1; i >= 0; i--) {
+//     while (
+//       stack2.length > 0 &&
+//       heights[i] < heights[stack2[stack2.length - 1]]
+//     ) {
+//       let index: number = stack2.pop() || 0;
+//       result2[index] = index - i;
+//     }
+//     stack2.push(i);
+//   }
 
-  result2.forEach((v, i) => {
-    result2[i] = v == 0 ? i + 1 : v;
-  });
+//   result2.forEach((v, i) => {
+//     result2[i] = v == 0 ? i + 1 : v;
+//   });
 
-  // calculate the area
-  let finalResult: number[] = new Array(heights.length).fill(0);
-  for (let i = 0; i < result.length; i++) {
-    finalResult[i] = (result[i] + result2[i] - 1) * heights[i];
-  }
+//   // calculate the area
+//   let finalResult: number[] = new Array(heights.length).fill(0);
+//   for (let i = 0; i < result.length; i++) {
+//     finalResult[i] = (result[i] + result2[i] - 1) * heights[i];
+//   }
 
-  console.log("Final result: ", finalResult);
+//   console.log("Final result: ", finalResult);
 
-  return Math.max(...finalResult);
-}
+//   return Math.max(...finalResult);
+// }
 
-function largestRectangleAreaOptimal(heights: number[]): number {
-  let stack: number[] = [];
-  let area = 0;
-  let i = 0;
-  while (i < heights.length) {
-    if (stack.length === 0 || heights[i] > heights[stack[stack.length - 1]]) {
-      stack.push(i);
-      i++;
-    } else {
-      //end of stack is local max and rest is decreasing
-      const a =
-        heights[stack.pop() as number] *
-        (stack.length === 0 ? i : i - 1 - stack[stack.length - 1]);
-      area = Math.max(area, a);
-    }
-  }
-  // we have to calculate the rest of the stack
-  while (stack.length > 0) {
-    const a =
-      heights[stack.pop() as number] *
-      (stack.length === 0 ? i : i - 1 - stack[stack.length - 1]);
-    area = Math.max(area, a);
-  }
-  return area;
-}
+// function largestRectangleArea_optimal(heights: number[]): number {
+//   let stack: number[] = [];
+//   let area = 0;
+//   let i = 0;
+//   while (i < heights.length) {
+//     if (stack.length === 0 || heights[i] > heights[stack[stack.length - 1]]) {
+//       stack.push(i);
+//       i++;
+//     } else {
+//       //end of stack is local max and rest is decreasing
+//       const a =
+//         heights[stack.pop() as number] *
+//         (stack.length === 0 ? i : i - 1 - stack[stack.length - 1]);
+//       area = Math.max(area, a);
+//     }
+//   }
+//   // we have to calculate the rest of the stack
+//   while (stack.length > 0) {
+//     const a =
+//       heights[stack.pop() as number] *
+//       (stack.length === 0 ? i : i - 1 - stack[stack.length - 1]);
+//     area = Math.max(area, a);
+//   }
+//   return area;
+// }
 
-function twoSum(numbers: number[], target: number): number[] {
-  for (let i = 0; i <= numbers.length; i++) {
-    if ( i > 0 && numbers[i] == numbers[i - 1]) {
-          console.log('skipped');
-      continue;
-    }
-    for (let j = i + 1; j < numbers.length; j++) {
-      console.log(i + 1,j + 1);
-      const result = numbers[i] + numbers[j];
-      if (result == target) {
-        return [i + 1, j + 1];
+// function twoSum(numbers: number[], target: number): number[] {
+//   for (let i = 0; i <= numbers.length; i++) {
+//     if ( i > 0 && numbers[i] == numbers[i - 1]) {
+//           console.log('skipped');
+//       continue;
+//     }
+//     for (let j = i + 1; j < numbers.length; j++) {
+//       console.log(i + 1,j + 1);
+//       const result = numbers[i] + numbers[j];
+//       if (result == target) {
+//         return [i + 1, j + 1];
+//       }
+//     }
+//   }
+//   console.log("No result found");
+//   return [0, 0];
+// }
+
+// function twoSumOptimal(numbers: number[], target: number): number[] {
+
+//   // two pointer approach
+//   // since we know that the array is sorted in ascending order we can start at the beginning and end of the array.
+//   let left = 0;
+//   let right = numbers.length - 1;
+
+//   while (left < right) {
+//       const sum = numbers[left] + numbers[right];
+
+//       if (sum === target) return [left + 1, right + 1];
+//       if (sum < target) left++;
+//       if (sum > target) right--;
+//   }
+
+//   return [];
+// }
+// find product of an array except self
+// function productExceptSelf(nums: number[]): number[] {
+//   //create answer array
+//   let answer: number[] = new Array(nums.length).fill(1);
+
+//   // iterate over input array
+//   for (let i = 0 ; i < nums.length-1 ; i++) {
+//       if (nums[i] == 1) {
+//           continue;
+//       } else if ( i == 0 ) {
+//           answer[i] = nums.slice(1, nums.length).reduce((a,b) => a * b);
+//       } else if ( i == 1 ) {
+//           answer[i] = nums[0] * nums.slice(2, nums.length - 1).reduce((a,b) => a * b);
+//       } else if ( i == nums.length ) {
+//           answer[i] = nums.slice(0, nums.length - 1).reduce((a,b) => a * b);
+//       } else {
+//           // find left product
+//           // find right product
+//           // multiply the two together
+//           let leftProduct = nums.slice(0, i-1).reduce((a,b) => a * b);
+//           let rightProduct = nums.slice(i+1, nums.length).reduce((a,b) => a * b);
+//           answer[i] = leftProduct * rightProduct;
+//       }
+//   }
+  
+
+// return answer;
+// };
+
+// function productExceptSelf_optimal(nums: number[]): number[] {
+//   const answer = new Array(nums.length).fill(1)
+
+//   // find left product
+//   let product=1
+//   for(let i=0;i<nums.length; i++){
+//       answer[i]*=product
+//       product*=nums[i]
+//   }
+
+//   // find right product
+//   product=1
+//   for(let i=nums.length-1;i>=0; i--){
+//       answer[i]*=product
+//       product*=nums[i]
+//   }
+//   return answer
+// };
+
+function longestConsecutive(nums: number[]): number {
+  let counts: number[] = [];
+  let count: number  = 1; 
+
+  if (nums.length == 0) return 0;
+  
+  nums.sort((a,b) => a-b );
+
+  // iterate through array
+  for (let i = 0; i < nums.length ; i++) {
+      // check if current number is in sequence with next number
+      if (nums[i] + 1 == nums[i+1]) {
+          count++; 
+      } else if (nums[i] == nums[i+1]) {
+          continue;
+      } else {
+          // if it isnt then we save the current count and reset the counter;
+          counts.push(count);
+          count = 1; 
       }
-    }
-  }
-  console.log("No result found");
-  return [0, 0];
-}
-
-function twoSumOptimal(numbers: number[], target: number): number[] {
-
-  // two pointer approach
-  // since we know that the array is sorted in ascending order we can start at the beginning and end of the array.
-  let left = 0;
-  let right = numbers.length - 1;
-
-  while (left < right) {
-      const sum = numbers[left] + numbers[right];
-
-      if (sum === target) return [left + 1, right + 1];
-      if (sum < target) left++;
-      if (sum > target) right--;
   }
 
-  return [];
-}
-twoSum([0, 0, 0, 0, 0, 2, 7, 11, 15], 9); // [1,2]
+  return Math.max(...counts);
+
+};
+
+longestConsecutive([100, 4, 200, 1, 3, 2]); // 4
+
+// twoSum([0, 0, 0, 0, 0, 2, 7, 11, 15], 9); // [1,2]
 
 // largestRectangleArea([2,1,5,6,2,3]);
 // topKFrequent([1, 1, 1, 2, 2, 3], 2); // [1,2]
