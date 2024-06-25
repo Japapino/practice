@@ -92,7 +92,8 @@ function calcVolume(a, b, c, d) {
 }
 
 function findSmallestValidTetrahedron(points) {
-  console.log('points: ', points);
+  // console.log('points: ', points);
+  console.time('findSmallestValidTetrahedron');
   const kdTree = new KDTree(points, distance, ["x", "y", "z"]);
 
   let minVolume = Infinity;
@@ -100,7 +101,7 @@ function findSmallestValidTetrahedron(points) {
 
   for (let i = 0; i < points.length; i++) {
     const p1 = points[i];
-    const neighbors = kdTree.nearest(p1, 10); // Adjust the number of nearest neighbors as needed
+    const neighbors = kdTree.nearest(p1, 100); // Adjust the number of nearest neighbors as needed
     // console.log('neighbors: ', neighbors);
     // console.log('i: ', i );
     for (let j = 0; j < neighbors.length; j++) {
@@ -125,18 +126,18 @@ function findSmallestValidTetrahedron(points) {
               // console.log("volume: ", volume);
 
               if (volume < minVolume) {
-                console.log('=============================================');
+                // console.log('=============================================');
                 // console.log('neighbors: ', neighbors);
                 // console.log('neighbors[j]: ', neighbors[j]);
-                console.log('points: ', points);
-                console.log('i: ', i); 
-                console.log('points[i]: ', points[i]);
-                console.log('=============================================');
+                // console.log('points: ', points);
+                // console.log('i: ', i); 
+                // console.log('points[i]: ', points[i]);
+                // console.log('=============================================');
                 // console.log("1: ", p1, "\n2: ", p2, "\n3: ", p3, "\n4: ", p4);
                 // console.log("i: ", i, "j: ", j, "k: ", k, "l: ", l);
                 // console.log("p1: ", points.indexOf(p1), "p2: ", points.indexOf(p2), "p3: ", points.indexOf(p3), "p4: ", points.indexOf(p4));
                 minVolume = volume;
-                bestTetrahedron = [points.indexOf(p1), points.indexOf(p2), points.indexOf(p3), points.indexOf(p4)];
+                bestTetrahedron = [p1, p2, p3, p4];
               }
             }
           }
@@ -145,13 +146,14 @@ function findSmallestValidTetrahedron(points) {
     }
   }
 
+  console.timeEnd("findSmallestValidTetrahedron");
   console.log("minVolume: ", minVolume);
-  console.log("bestTetrahedron: ", bestTetrahedron);
+  // console.log("bestTetrahedron: ", bestTetrahedron);
 
   return bestTetrahedron;
 }
 
-readPointsFromFile("points_small.txt")
+readPointsFromFile("points_large.txt")
   .then(findSmallestValidTetrahedron)
   .then(function (tetrahedron) {
     return console.log(tetrahedron);

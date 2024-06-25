@@ -6,6 +6,7 @@ function validTetrahedron(filePath: string): number[] {
   // tetrahedron has 4 points
   // find smallest tetrahedron from the list of points
   // the points' n values must sum to 100
+  console.time('findSmallestValidTetrahedron');
 
   const data = fs.readFileSync(filePath).toString();
   const lines = data.split("\n");
@@ -34,11 +35,10 @@ function validTetrahedron(filePath: string): number[] {
               tetrahedron[3]
             );
 
-
             // Update the smallest volume and corresponding tetrahedron
             if (volume < smallestVolume) {
-              console.log("volume: ", volume);
-              console.log("tetrahedron: ", tetrahedron);
+              // console.log("volume: ", volume);
+              // console.log("tetrahedron: ", tetrahedron);
               smallestVolume = volume;
               smallestTetrahedron = [points.indexOf(tetrahedron[0]), points.indexOf(tetrahedron[1]), points.indexOf(tetrahedron[2]), points.indexOf(tetrahedron[3])];
             }
@@ -48,6 +48,7 @@ function validTetrahedron(filePath: string): number[] {
     }
   }
 
+  console.timeEnd("findSmallestValidTetrahedron");
 
   return smallestTetrahedron;
 }
@@ -90,6 +91,6 @@ function calculateTetrahedronVolume(
   return volume;
 }
 
-const result = validTetrahedron("points_small.txt");
+const result = validTetrahedron("points_large.txt");
 console.log("==== Result ====");
 console.log(result);

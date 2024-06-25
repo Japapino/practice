@@ -4,7 +4,9 @@
     "scripts": {
         "start": "tsc vt/validTetrahedron.ts && node vt/validTetrahedron.js",
         "start2": "tsc vt/validTetrahedron2.ts && node vt/validTetrahedron2.js",
-        "startk": "tsc vt/validTetrahedronKdTree.ts && node vt/validTetrahedronKdTree.js"
+        "startk": "tsc vt/validTetrahedronKdTree.ts && node vt/validTetrahedronKdTree.js",
+        "startk2": "node vt/validTetrahedronKdTree2.js"
+
     },
     "dependencies": {
         "kd-tree-javascript": "^1.0.3",
