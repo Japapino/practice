@@ -5,11 +5,19 @@
         "start": "tsc vt/validTetrahedron.ts && node vt/validTetrahedron.js",
         "start2": "tsc vt/validTetrahedron2.ts && node vt/validTetrahedron2.js",
         "startk": "tsc vt/validTetrahedronKdTree.ts && node vt/validTetrahedronKdTree.js",
-        "startk2": "node vt/validTetrahedronKdTree2.js"
+        "startk2": "node vt/validTetrahedronKdTree2.js",
+        "test": "mocha 'test/**/*.js' --recursive --reporter mocha-junit-reporter --timeout 60000 --exit"
     },
     "dependencies": {
+        "jest": "^29.7.0",
+        "junit": "^1.4.9",
         "kd-tree-javascript": "^1.0.3",
         "kd-tree-ts": "^0.2.1",
+        "mocha": "^10.7.3",
         "valid-tetrahedron": "file:"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha-junit-reporter": "^2.2.1"
     }
 }

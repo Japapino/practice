@@ -236,7 +236,6 @@ function lengthOfLongestSubstring(s) {
   let maxLength = 0;
 
   for (let right = 0; right < s.length; right++) {
-    console.log("right: ", right);
     while (stack.has(s[right])) {
       stack.delete(s[left]);
       left++;
@@ -406,5 +405,165 @@ function trap(height) {
 //     else console.log(i);
 //   }
 // }
+
+const buildObjectBySeenCount = (list) => {
+  // Write your code here
+  // takes in an array of numbers, and returns an object (probably a map) with the frequency of each number
+  // question task, do we include skipped numbers in the histogram? like if 4 -> 2, 5->0, 5->3; do we show 5? 
+
+  // result variable
+  let result = new Map();
+
+  list.forEach((n, i) => {
+    const num = list[i];
+
+    result.set(num, (result.get(num) || 0) + 1);
+  });
+
+  return result;
+};
+
+const HistogramBuilder = (list) => {
+  const data = buildObjectBySeenCount(list); // map
+  // sort in reverse order
+  const keys = Array.from(data.keys()).sort((a, b) => a - b); // keys are each number that is in the array at least once
+  const maxHeight = Math.max(...Array.from(data.values()));
+  const maxWidth = keys.length;
+
+  // console.log("Array   : ", Array.from(data.values()));
+  // console.log("maxWidth: ", maxWidth);
+
+  // iterate over the list of values a print them using console.log
+  // this block makes a pyramid shape
+  // nums.forEach((k) => {
+  //   const key = k;
+  //   const value = data.get(k);
+  //   let space = ' ';
+  //   const line = '';
+  //   let hash = '';
+
+  //   // add spaces
+  //   for ( let i = 0; i < (maxWidth - value) / 2 ; i++ ) {
+  //     space = line.concat(' ');
+  //   };
+
+  //   // add hash
+  //   for ( let i = 0; i < value; i++ ) {
+  //     hash = hash.concat('#');
+  //   };
+
+  //   const string = key + ' | ' + space.concat(hash.concat(space));
+
+  //   // so we actually want the values on the x-axis, and frequency on the y-axis
+
+  //   console.log('string: ', string);
+  // });
+
+  // so we actually want the values on the x-axis, and frequency on the y-axis
+  //      2  3  4  5
+  //      2  1  2  1
+  //      0  1  2  3
+  for (let v = maxHeight; v >= 1; v--) {
+    let line = ' ';
+    // the max count will determine the height
+    // printing happens 1 horizontal line at a time
+    // if we think of it like print a grid, and each space as a cell
+    // we can assign an index to each number, with a space on the sides.
+
+    // [ 2, 1, 2, 1]
+
+    // start at the top of the graph, if the bar for the key appears in that line, print it.
+    for (let k = 0; k <= maxWidth; k++) {
+      const key = keys[k];
+      const value = data.get(key); 
+      // console.log('key  : ', key); 
+      // console.log('value: ', value); 
+      // console.log('v    : ', v); 
+      // console.log('---------------------------')
+      // if value >= i put #, if not add a space
+
+       if (value >= v) {
+        line = line + '#'
+      } else {
+        line = line + ' '
+
+      }
+
+      // console.log('line: ', line); 
+
+    }
+
+    // need to know which keys' bar reaches this height. 
+    // data.get(k) > i, then print #
+    // old loop doesnt work because the # won't always be together
+    // need to concat space by space
+    const string = v + " | " + line + " "
+
+    console.log(string);
+  }
+
+    console.log('     ' + keys.join(''));
+
+  // draw line at the bottom
+};
+
+// console.log("result: ", HistogramBuilder([2, 4, 5, 2, 3, 4]));
+// Input: [2, 4, 5, 2, 3, 4]
+// Histogram:
+// 4 |     ##
+// 3 |    ####
+// 2 |   ######
+// 1 |  ########
+//      ---------
+//      2  3  4  5
+//      2  1  2  1
+
+
+function flattenArray(value, result) {
+  // Write your code here
+
+  // given an array of numbers with unknown dimensions, return a signel flattened, version. 
+  // Array can only be filled with more arrays? or objects also? 
+  // Will in put always be numbers? Can they be negative, decimals, fractions? 
+
+  result = result ?? []; 
+  // let valsToDo = []; 
+
+  // function to add numbers to result; 
+  // input can either be a number or an array;
+  const flatten = ( val ) => {
+    // if val is a number, push to result;
+    // if val is an array, re-call funtion. 
+    // console.log('val: ', val); 
+    if ( val instanceof Array) {
+      // we can either recall the function or add to a stack to take care of later;
+
+      // valsToDo.push(val); 
+      flattenArray(val, result); 
+    } else if ( val || val == 0 ) {
+
+      result.push(val); 
+    }
+
+  }; 
+
+  // iterate through each val of value
+  value.forEach((v) => {
+    console.log('v: ', v); 
+    flatten(v); 
+  });
+
+
+  return result; 
+  
+}
+
+const val = [1, -2, [3, -4, [-5]]];
+console.log(flattenArray(val));
+
+// Input: [[1, 2, [3, [4, 5]]], 6]
+
+// Recursive Output: [1, 2, 3, 4, 5, 6]
+// Iterative Output: [1, 2, 3, 4, 5, 6]
 
 process.exit();
