@@ -518,7 +518,6 @@ const HistogramBuilder = (list) => {
 //      2  3  4  5
 //      2  1  2  1
 
-
 function flattenArray(value, result) {
   // Write your code here
 
