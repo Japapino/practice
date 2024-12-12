@@ -65,13 +65,13 @@ function lengthOfLongestSubstring_atMost2Repeat(s) {
  * @return {string}
  */
 var longestPalindrome_main_simplified = function (s) {
-  // given a string, return the longest substring that is the same forward and reversed
+  // given a string, return the longest substring that is the same forward and reversed.
 
-  // so we are going to use a sliding window approach, for that we need two pointers starting at the begining and begining +1
+  // so we are going to use a sliding window approach, for that we need two pointers starting at the begining and begining +1.
 
   // so our solution doesnt work for larger strings, we have to rethink our approach. instead of staring at the begining and and end and working inward.
   // we change our solution to work outwork looking at each set.
-  // this should reduce the amount of runs also
+  // this should reduce the amount of runs also.
 
   // using each letter of the string as the center, we slowly expand out until we dont have a palindrom, then continue.
   if (s.length < 2) return s;

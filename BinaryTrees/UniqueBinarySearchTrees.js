@@ -26,8 +26,9 @@ var generateTrees = function(n) {
     let memo = new Map();
 
     // build trees based on left and right boundary
-    // param {lbound}, left boundary or limit the sub tree values can go as low as
-    // param {rbound}, right boundary or limit the subtree values can go as high as
+    // @param {lbound}, left boundary or limit the sub tree values can go as low as
+    // @param {rbound}, right boundary or limit the subtree values can go as high as
+    // @return {[]TreeNode}
     function buildTree(lbound, rbound) {
         if (memo.has( `${lbound}-${rbound}` )) {          // check if the subtree with these limits has already been generated
             return memo.get( `${lbound}-${rbound}` );     // if it has then return that subtree value
