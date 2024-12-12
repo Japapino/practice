@@ -1,15 +1,16 @@
 // https://adventofcode.com/2024/day/10
-
-// @param {array[][]} topo
-// @return {number}
+/** 
+* @param {array[][]} topo
+* @return {number}
+*/
 const ratePaths = (topo) => {
   // first we want to get all trail heads
 
   let trailHead = [];
-  let unvisited = []; 
   let total = 0;
-  let numCol = topo.length();
-  let numRow = topo[0].length();
+  let numCol = topo.length;
+  let numRow = topo[0].length;
+  let stack = []; // stack of unvisited positions as [x,y]; 
 
   for (let i = 0; i < numCol; i++) {
     for (let j = 0; j < numRow; j++) {
@@ -23,69 +24,83 @@ const ratePaths = (topo) => {
 
     // when at a node, we want to check each direction (up, down, left, right) for a valid step forward, then push those steps onto the stack.
     // we can do this recursively pretty easil, recursive search is inherently dfs.
-    dfs(head, total);
+    const firstNode = new Node(head, topo[head[0]][head[1]], -1); 
+    dfs(firstNode);
   });
 
   function dfs(node) {
-    if (topo[node[0], node[1]] ?? true) return; 
+    // validation, not sure if necessary
+    // if (topo[node[0], node[1]] ?? true) return; 
 
-    if ((topo[node[0], node[1]] ?? -1) == 9) {
+    if (node.value == 9) {
       total++;
       return;
-    };
+    } else if (isNaN(node.value) || node.value < 0 || node.value > 9) return;
 
-    let stack = []; // stack of [x,y]
-    let currVal = topo[i][j];
-    let left = topo[i - 1][j] ?? -1;
-    let right = topo[i + 1][j] ?? -1;
-    let up = topo[i][j + 1] ?? -1;
-    let down = topo[i][j - 1] ?? -1;
+    let x = node.pos[0];
+    let y = node.pos[1];
+    let currVal = node.value;
+
+    console.log('-------------');
+    // console.log('curr : ', [x, y]);
+
+    let left = topo[x - 1] ? topo[x - 1][y] : -99; // get value and verify, if none or bad pos then -1;
+    let right = topo[x + 1] ? topo[x + 1][y] : -99;
+    let up = topo[x][y + 1] ?? -99;
+    let down = topo[x][y - 1] ?? -99;
     let dir = [up, down, right, left]; // base direction off of index
+    // console.log('val: ', currVal);
+    // console.log('dir: ', dir);
 
     for (let i = 0; i < 4; i++) {
-      if (dir[i] == -1) continue;
-      if (dir[i] == currVal + 1) {
+      if (isNaN(dir[i]) || node.last == i) continue; 
+
+      let nVal = parseInt(dir[i]);
+
+      console.log([nVal, node.value+1]);
+
+      if (nVal == node.value + 1) {
         switch (i) {
           case 0:
-            stack.push(currVal.north());
+            stack.push(new Node(node.north(), currVal, 1));
           case 1:
-            stack.push(currVal.south());
+            stack.push(new Node(node.south(), currVal, 0));
           case 2:
-            stack.push(currVal.east());
+            stack.push(new Node(node.east(), currVal, 3));
           case 3:
-            stack.push(currVal.west());
+            stack.push(new Node(node.west(), currVal, 2));
         }
       }
     }
-  
-    while (stack[0]) {
-      dfs(stack.pop(), stack); 
+    console.log('stack: ', stack);
+
+    while (stack.length > 0) {
+      dfs(stack.pop(), stack);
     }
   }
 
   return total;
 };
 
-class node {
-  constructor(ps, val) {
+class Node {
+  /** 
+  * @param {number[]} ps position as [x,y]
+  * @param {number} val value of node.
+  */
+  constructor(ps, val, prev) {
     this.pos = ps;
-    this.value = val;
+    this.value = val.isNaN ? -99 : parseInt(val);
+    this.last = prev;
+
     this.left = [ps[0] - 1, ps[0]];
     this.right = [ps[0] + 1, ps[0]];
     this.up = [ps[0], ps[0] + 1];
     this.down = [ps[0], ps[0] - 1];
   }
-
-  //@param {number[]}
-  set(xy) {
-    this.pos = xy;
-    this.left = [ps[0] - 1, ps[0]];
-    this.right = [ps[0] + 1, ps[0]];
-    this.up = [ps[0], ps[0] + 1];
-    this.down = [ps[0], ps[0] - 1];
-  }
-
   // these return position as [x,y] 
+  /**
+   * @return {number[]}
+   */
   north() {
     return this.up;
   }
@@ -103,38 +118,6 @@ class node {
   }
 }
 
-function dfs(node) {
-  if 
-  let stack = []; // stack of [x,y]
-  let currVal = node[i][j];
-  let left = node[i - 1][j] ?? -1;
-  let right = node[i + 1][j] ?? -1;
-  let up = node[i][j + 1] ?? -1;
-  let down = node[i][j - 1] ?? -1;
-  let dir = [up, down, right, left]; // base direction off of index
-
-  // if the next value is a 9 we need to increment the score.
-
-  for (let i = 0; i < 4; i++) {
-    if (dir[i] == -1) continue;
-    if (dir[i] == currVal + 1) {
-      switch (i) {
-        case 0:
-          stack.push(currVal.north());
-        case 1:
-          stack.push(currVal.south());
-        case 2:
-          stack.push(currVal.east());
-        case 3:
-          stack.push(currVal.west());
-      }
-    }
-  }
-
-  while (stack[0]) {
-    dfs(stack.pop(), stack); 
-  }
-}
 // first thing we want to do is turn the data into a valid array
 
 const dataToArray = (data) => {
