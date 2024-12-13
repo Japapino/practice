@@ -28,26 +28,31 @@ const ratePaths = (topo) => {
     dfs(firstNode);
   });
 
+  /**
+   * @param {Node} node 
+   * @returns 
+   */
   function dfs(node) {
     // validation, not sure if necessary
     // if (topo[node[0], node[1]] ?? true) return; 
+    let x = node.pos[0];
+    let y = node.pos[1];
+    let currVal = topo[x][y];
 
     if (node.value == 9) {
       total++;
       return;
     } else if (isNaN(node.value) || node.value < 0 || node.value > 9) return;
 
-    let x = node.pos[0];
-    let y = node.pos[1];
-    let currVal = node.value;
+
 
     console.log('-------------');
-    // console.log('curr : ', [x, y]);
+    console.log('curr : ', [x, y, currVal]);
 
     let left = topo[x - 1] ? topo[x - 1][y] : -99; // get value and verify, if none or bad pos then -1;
     let right = topo[x + 1] ? topo[x + 1][y] : -99;
-    let up = topo[x][y + 1] ?? -99;
-    let down = topo[x][y - 1] ?? -99;
+    let up = topo[x][y - 1] ?? -99;
+    let down = topo[x][y + 1] ?? -99;
     let dir = [up, down, right, left]; // base direction off of index
     // console.log('val: ', currVal);
     // console.log('dir: ', dir);
@@ -57,22 +62,23 @@ const ratePaths = (topo) => {
 
       let nVal = parseInt(dir[i]);
 
-      console.log([nVal, node.value+1]);
-
       if (nVal == node.value + 1) {
         switch (i) {
           case 0:
-            stack.push(new Node(node.north(), currVal, 1));
+            stack.push(new Node(node.north(), nVal, 1));
+            continue;
           case 1:
-            stack.push(new Node(node.south(), currVal, 0));
+            stack.push(new Node(node.south(), nVal, 0));
+            continue;
           case 2:
-            stack.push(new Node(node.east(), currVal, 3));
+            stack.push(new Node(node.east(), nVal, 3));
+            continue;
           case 3:
-            stack.push(new Node(node.west(), currVal, 2));
+            stack.push(new Node(node.west(), nVal, 2));
+            continue;
         }
       }
     }
-    console.log('stack: ', stack);
 
     while (stack.length > 0) {
       dfs(stack.pop(), stack);
@@ -92,10 +98,10 @@ class Node {
     this.value = val.isNaN ? -99 : parseInt(val);
     this.last = prev;
 
-    this.left = [ps[0] - 1, ps[0]];
-    this.right = [ps[0] + 1, ps[0]];
-    this.up = [ps[0], ps[0] + 1];
-    this.down = [ps[0], ps[0] - 1];
+    this.left = [ps[0] - 1, ps[1]];
+    this.right = [ps[0] + 1, ps[1]];
+    this.up = [ps[0], ps[1] - 1];
+    this.down = [ps[0], ps[1] + 1];
   }
   // these return position as [x,y] 
   /**
@@ -110,11 +116,11 @@ class Node {
   }
 
   east() {
-    return this.left;
+    return this.right;
   }
 
   west() {
-    return this.right;
+    return this.left;
   }
 }
 
@@ -127,7 +133,10 @@ const dataToArray = (data) => {
   // make arrays of characters from rows
   let array = rows.map((row) => row.split(""));
   console.log("data: \n", array[0][0]);
-  return array;
+
+  // inverse so we can use dat[x][y]
+  let transposedArray = array[0].map((_, colIndex) => array.map(row => row[colIndex]));
+  return transposedArray;
 };
 
 // 10..9..
