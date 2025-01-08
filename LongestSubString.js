@@ -13,7 +13,8 @@ var lengthOfLongestSubstring = function (s) {
 
   for (let end = 0; end < s.length; end++) {
     const charCode = s.charCodeAt(end);
-    start = Math.max(start, chars[charCode] + 1); // move start to char that begining of first repetition
+    // move start to char begining of first repetition.
+    start = Math.max(start, chars[charCode] + 1); 
     chars[charCode] = end; // move end to character that repeated
     maxLength = Math.max(maxLength, end - start + 1);
   }

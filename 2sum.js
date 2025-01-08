@@ -16,6 +16,7 @@ const twoSum_twoPointer = (numbers, target) => {
     let result = [];
     let len = numbers.length;
     let r = len-1;
+    let l = 0; 
 
     while (l < r) {
         const sum = numbers[l] + numbers[r]; 

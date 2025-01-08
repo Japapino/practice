@@ -129,10 +129,11 @@ function helper(s, n, x) {
 // #endregion
 
 // #region MaxLengthSubStringThrice2
+
 // this way is easier to understand and visualize then the previous
-// We keep an 26x3 array, of all the characters and 
+// We keep an 26x3 array, of all the characters and
 // we find the top 3 longest strings of each character
-// then pick the smaller number. Becuase if the smaller string will appear in the larger ones also. 
+// then pick the smaller number. Becuase if the smaller string will appear in the larger ones also.
 // video: https://www.youtube.com/watch?v=PHKPcheMkyU
 /**
  * @param {string} s
@@ -140,7 +141,9 @@ function helper(s, n, x) {
  */
 function maximumLength_better(s) {
   const len = s.length;
-  let top3freq = Array(26).fill().map(() => Array(3).fill(-1));
+  let top3freq = Array(26)
+    .fill()
+    .map(() => Array(3).fill(-1));
   let lastSeen = "*";
   let winLen = 0;
 
@@ -148,7 +151,7 @@ function maximumLength_better(s) {
   for (let i = 0; i < len; i++) {
     // get char code of letter and check if is the same as the last seen letter
     let charIdx = s[i].charCodeAt(0) - "a".charCodeAt(0);
-    winLen = s[i] == lastSeen ? winLen+1 : 1;
+    winLen = s[i] == lastSeen ? winLen + 1 : 1;
     lastSeen = s[i];
 
     // find lowest value and update it if window length is larger
@@ -166,6 +169,55 @@ function maximumLength_better(s) {
 }
 
 let str = "abcccccdddd";
-console.log(maximumLength(str));
+// console.log(maximumLength(str));
+
+// #endregion
+
+// #region continuous subarrays
+
+// You are given a 0-indexed integer array nums. A subarray of nums is called continuous if:
+//     Let i, i + 1, ..., j be the indices in the subarray. Then, for each pair of indices i <= i1, i2 <= j, 0 <= |nums[i1] - nums[i2]| <= 2.
+// Return the total number of continuous subarrays.
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var continuousSubarrays = function (nums) {
+  let mp = new Map();
+  let l = 0;
+  let r = 0;
+  let count = 0;
+
+  // right side iterates array
+  for (; r < nums.length; r++) {
+    console.log(mp);
+    console.log([l, r]);
+    // set number to key, and index to value. {number} -> {index}
+    mp.set(nums[r], r);
+    // if the difference between the largest and smallest key > 2
+    if (Math.max(...mp.keys()) - Math.min(...mp.keys()) > 2) {
+      // if the largest index is smaller than the smallest index?
+      if (Math.max(...mp.values()) < Math.min(...mp.values())) {
+        console.log("max");
+        l = Math.max(...mp.values()) + 1;
+        mp.delete(Math.max(...mp.keys()));
+      } else {
+        console.log("min");
+
+        l = Math.min(...mp.values()) + 1;
+        mp.delete(Math.min(...mp.keys()));
+      }
+    }
+
+    count += r - l + 1;
+  }
+
+  return count;
+};
+
+let nums = [5, 4, 2, 4];
+
+console.log(continuousSubarrays(nums));
 
 // #endregion
